@@ -2,11 +2,25 @@ import Foundation
 
 typealias CallID = UUID
 
-struct Call {
+struct Call: Equatable {
     let id: CallID
-    let incomingUser: User
-    let outgoingUser: User
-    let status: CallStatus
+    var incomingUser: User?
+    var outgoingUser: User?
+    var status: CallStatus?
+    
+    mutating func resetValues(){
+        status = nil
+        incomingUser = nil
+        outgoingUser = nil
+    }
+    
+    var hashValue: Int {
+        [id].hashValue
+    }
+    
+    static func ==(leftCall: Call, rightCall: Call) -> Bool{
+        return leftCall.id == rightCall.id
+    }
 }
 
 enum CallEndReason: Equatable {
@@ -21,4 +35,3 @@ enum CallStatus: Equatable {
     case talk
     case ended(reason: CallEndReason)
 }
-
